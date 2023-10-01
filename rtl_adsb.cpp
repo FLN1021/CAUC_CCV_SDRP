@@ -61,7 +61,8 @@ void display(int *frame, int len)
     fprintf(file, "*");
     for (i=0; i<((len+7)/8); i++) {
         fprintf(file, "%02x", frame[i]);}
-    fprintf(file, ";\r\n");
+//    fprintf(file, ";\r\n");
+    fprintf(file, ";\n");
     if (!verbose_output) {
         return;}
     fprintf(file, "DF=%i CA=%i\n", df, frame[0] & 0x07);
@@ -265,6 +266,8 @@ int adsb_dec(){
     pthread_cond_init(&ready, nullptr);
     pthread_mutex_init(&ready_m, nullptr);
     squares_precompute();
+
+    file = stdout;
 
     buffer = new uint8_t [DEFAULT_BUF_LENGTH];
     dev_index = verbose_device_search((char*)"0");

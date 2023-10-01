@@ -114,7 +114,7 @@ int verbose_device_search(char *s)
     int i, device_count, device, offset, rc;
     char *s2;
     char vendor[256] = {0}, product[256] = {0}, serial[256] = {0};
-    device_count = rtlsdr_get_device_count();
+    device_count = (int)rtlsdr_get_device_count();
     if (!device_count) {
         fprintf(stderr, "No supported devices found.\n");
         return -1;
@@ -176,7 +176,7 @@ int verbose_device_search(char *s)
         rc = rtlsdr_get_device_usb_strings(i, vendor, product, serial);
         if (rc)
             continue;
-        offset = strlen(serial) - strlen(s);
+        offset = (int)(strlen(serial) - strlen(s));
         if (offset < 0) {
             continue;}
         if (strncmp(s, serial+offset, strlen(s)) != 0) {
