@@ -4,6 +4,7 @@
 //
 
 #include <csignal>
+#include <string>
 #include "rtl_adsb.h"
 
 static pthread_t demod_thread;
@@ -29,7 +30,6 @@ static void sighandler(int signum)
     do_exit = 1;
     rtlsdr_cancel_async(dev);
 }
-
 
 int abs8(int x)
 /* do not subtract 127 from the raw iq, this handles it */
@@ -59,8 +59,14 @@ void display(int *frame, int len)
     if (quality == 0 && !(df==11 || df==17 || df==18 || df==19)) {
         return;}
     fprintf(file, "*");
+    char buf[4];
+    std::string hex_str;
     for (i=0; i<((len+7)/8); i++) {
-        fprintf(file, "%02x", frame[i]);}
+        sprintf(buf,"%02X",frame[i]);
+        hex_str += buf;
+//        fprintf(file, "%02x", frame[i]);
+    }
+    fprintf(file,"%s",hex_str.c_str());
 //    fprintf(file, ";\r\n");
     fprintf(file, ";\n");
     if (!verbose_output) {
